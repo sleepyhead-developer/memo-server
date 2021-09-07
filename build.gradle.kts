@@ -41,6 +41,8 @@ dependencies {
 	testImplementation("io.projectreactor:reactor-test")
 	implementation("io.springfox",  "springfox-swagger-ui", "2.9.2")
 	implementation("io.springfox", "springfox-swagger2", "2.9.2")
+	implementation("org.springdoc:springdoc-openapi-webflux-ui:1.5.10")
+	implementation("org.springdoc:springdoc-openapi-kotlin:1.5.10")
 }
 
 tasks.withType<KotlinCompile> {
