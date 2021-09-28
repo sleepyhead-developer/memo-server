@@ -1,0 +1,33 @@
+{
+  "properties": [
+    {
+      "name": "firebase.sdk.path",
+      "type": "java.lang.String",
+      "description": "Description for firebase.sdk.path."
+    },
+    {
+      "name": "com.sleepyhead.password.encoder.secret",
+      "type": "java.lang.String",
+      "description": "Description for com.sleepyhead.password.encoder.secret."
+    },
+    {
+      "name": "com.sleepyhead.password.encoder.iteration",
+      "type": "java.lang.String",
+      "description": "Description for com.sleepyhead.password.encoder.iteration."
+    },
+    {
+      "name": "com.sleepyhead.password.encoder.keylength",
+      "type": "java.lang.String",
+      "description": "Description for com.sleepyhead.password.encoder.keylength."
+    },
+    {
+      "name": "com.sleepyhead.jjwt.secret",
+      "type": "java.lang.String",
+      "description": "Description for com.sleepyhead.jjwt.secret."
+    },
+    {
+      "name": "com.sleepyhead.jjwt.expiration",
+      "type": "java.lang.String",
+      "description": "Description for com.sleepyhead.jjwt.expiration."
+    }
+  ] }

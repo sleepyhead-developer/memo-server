@@ -1,4 +1,4 @@
-package com.sleepyhead.memo.util
+package com.sleepyhead.memo.config
 
 import com.google.auth.oauth2.GoogleCredentials
 import com.google.firebase.FirebaseApp
@@ -14,7 +14,7 @@ import javax.annotation.PostConstruct
 
 
 @Configuration
-class FirebaseConfiguration {
+class FirebaseConfig {
 
   lateinit var firebaseApp: FirebaseApp
   

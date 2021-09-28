@@ -2,6 +2,8 @@ package com.sleepyhead.memo.model
 
 import lombok.AllArgsConstructor
 import lombok.NoArgsConstructor
+import org.springframework.security.core.GrantedAuthority
+import org.springframework.security.core.userdetails.UserDetails
 import javax.persistence.*
 
 @Entity
@@ -24,6 +26,9 @@ class User(
   @Column(name = "email")
   val email: String,
   
+  @Column(name="password")
+  val password: String,
+  
   @Column(name = "photo_url")
   val photoUrl: String,
   
@@ -33,4 +38,5 @@ class User(
   @Column(name = "last_sign_in_time")
   val lastSignInTime: Long
 )
+
 

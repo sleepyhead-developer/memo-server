@@ -10,4 +10,6 @@ import reactor.core.publisher.Mono
 interface UserRepository : JpaRepository<User, Long> {
   
   fun findByUid(uid: String): User
+  fun findByName(name: String): User
+  fun findByEmail(email: String): User
 }
