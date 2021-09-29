@@ -1,6 +1,7 @@
 package com.sleepyhead.memo.security
 
 import lombok.AllArgsConstructor
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Bean
 import org.springframework.http.HttpStatus
 import org.springframework.security.access.AccessDeniedException
@@ -17,7 +18,10 @@ import reactor.core.publisher.Mono
 @EnableReactiveMethodSecurity
 class WebSecurityConfig {
   
+  @Autowired
   lateinit var authenticationManager: AuthenticationManager
+  
+  @Autowired
   lateinit var securityContextRepository: SecurityContextRepository
   
   @Bean

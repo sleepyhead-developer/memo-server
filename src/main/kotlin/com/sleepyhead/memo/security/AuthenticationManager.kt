@@ -16,7 +16,8 @@ import java.util.stream.Collectors
 @AllArgsConstructor
 class AuthenticationManager: ReactiveAuthenticationManager {
   
-  private val jwtUtil = JWTUtil()
+  @Autowired
+  lateinit var jwtUtil: JWTUtil
   
   override fun authenticate(authentication: Authentication): Mono<Authentication> {
     val authToken: String = authentication.credentials.toString()

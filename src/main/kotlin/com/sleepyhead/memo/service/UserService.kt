@@ -5,6 +5,7 @@ import com.sleepyhead.memo.repository.UserRepository
 import javassist.bytecode.DuplicateMemberException
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
+import javax.annotation.PostConstruct
 
 
 @Service
@@ -14,18 +15,11 @@ class UserService {
   lateinit var userRepository: UserRepository
   
   
-//  @PostConstruct
-//  fun init() {
-////    val data = HashMap<Any, Any>()
-//
-//    //username:passwowrd -> user:user
-//    User(10, "cBrlgyL2GI2GINuLUUwgojITuIufFycpLG4490dhGtY=", "abcd", "user1@sleepy.com",""))
-//
-//    //username:passwowrd -> admin:admin
-//
-//      User(11, "dQNjUIMorJb8Ubj2+wVGYp6eAeYkdekqAcnYp+aRq5w=", true, Arrays.asList(Role.ROLE_ADMIN))
-//    )
-//  }
+  @PostConstruct
+  fun init() {
+    userRepository.save(User(email = "user1@sleepy.com", password = "1234", id = null, name = "jenny", uid="", photoUrl = "www", creationTime = 0L, lastSignInTime = 0L))
+    userRepository.save(User(email = "user2@sleepy.com", password = "1111", name = "lcyer", uid = "", photoUrl = "jjj", creationTime = 0L, lastSignInTime = 0L))
+  }
 
 //  @Autowired
 //  lateinit var userRepository: UserRepository
@@ -33,5 +27,4 @@ class UserService {
 //  fun findByUserName(userName: String): Mono<User> {
 //    return Mono.justOrEmpty()
 //  }
-
 }

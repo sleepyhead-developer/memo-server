@@ -11,21 +11,22 @@ import javax.crypto.spec.PBEKeySpec
 
 
 @Component
-class PBKDF2Encoder: PasswordEncoder {
+class PBKDF2Encoder (
   
-  @Value("\${springboot.password.encoder.secret}")
-  private val secret: String? = null
+  @Value("\${com.sleepyhead.password.encoder.secret}")
+  val secret: String,
   
-  @Value("\${springboot.password.encoder.iteration}")
-  private val iteration: Int = 0
+  @Value("\${com.sleepyhead.password.encoder.iteration}")
+  val iteration: Int,
   
-  @Value("\${springboot.password.encoder.keylength}")
-  private val keyLength: Int = 0
-  
+  @Value("\${com.sleepyhead.password.encoder.keylength}")
+  val keyLength: Int
+ ): PasswordEncoder
+{
   override fun encode(rawPassword: CharSequence?): String {
     return try {
       val result = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA512")
-        .generateSecret(PBEKeySpec(rawPassword.toString().toCharArray(), secret!!.toByteArray(), iteration, keyLength))
+        .generateSecret(PBEKeySpec(rawPassword.toString().toCharArray(), secret.toByteArray(), iteration, keyLength))
         .encoded
       Base64.getEncoder().encodeToString(result)
     } catch (ex: NoSuchAlgorithmException) {

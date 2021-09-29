@@ -34,11 +34,11 @@ class RouterConfig(private val memoHandler: MemoHandler, private val userHandler
   fun userRouter() = nest(path("/user"),
     router {
       listOf(
-        GET("/{uid}", userHandler::getUser)
+        GET("/{uid}", userHandler::getUser),
+        POST("/login", userHandler::login)
       )
     }
   )
-  
 //  @Bean
 //  fun memoAppRoutes(userHandler: UserHandler) : RouterFunction<ServerResponse>{
 //    return RouterFunctions
