@@ -1,7 +1,6 @@
 package com.sleepyhead.memo.handler
 
 import com.google.firebase.auth.FirebaseAuth
-import com.sleepyhead.memo.model.Memo
 import com.sleepyhead.memo.model.User
 import com.sleepyhead.memo.model.security.AuthRequest
 import com.sleepyhead.memo.model.security.AuthResponse
@@ -11,15 +10,13 @@ import com.sleepyhead.memo.security.PBKDF2Encoder
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
-import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Component
-import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.reactive.function.BodyInserters
 import org.springframework.web.reactive.function.server.ServerRequest
 import org.springframework.web.reactive.function.server.ServerResponse
 import org.springframework.web.reactive.function.server.body
 import reactor.core.publisher.Mono
 import reactor.kotlin.core.publisher.switchIfEmpty
-import reactor.kotlin.core.publisher.toMono
 
 
 @Component
@@ -34,33 +31,28 @@ class UserHandler {
   @Autowired
   lateinit var jwtUtil: JWTUtil
   
-  
-//  fun login(@RequestBody ar: AuthRequest): Mono<ServerResponse> {
-//    return userRepository.findByEmail(ar.userEmail)
-//      .filter { user -> passwordEncoder.encode(ar.password) == user.password }
-//      .flatMap { user ->
-//        ServerResponse.ok()
-//          .body<ServerResponse>(jwtUtil.doGenerateToken(user))
-//          .switchIfEmpty(ServerResponse.status(HttpStatus.UNAUTHORIZED).build())
-//      }
-//  }
-  
-  fun login(req: ServerRequest): Mono<ServerResponse> {
-    val userEmail = req.pathVariable("email")
-    val password = req.pathVariable("password")
-    return userRepository.findByEmail(userEmail).toMono()
-      .filter { user -> passwordEncoder.encode(password) == user.password }
+  fun login(req:ServerRequest): Mono<ServerResponse> {
+    
+    val loginRequest= req.bodyToMono(AuthRequest::class.java)
+    var loginPassword = ""
+    
+    return loginRequest.map { login ->
+      loginPassword = login.password
+      userRepository.findByEmail(login.email)
+    }.filter { user -> passwordEncoder.encode(loginPassword) == user.password }
       .flatMap { user ->
         ServerResponse.ok()
-          .body<ServerResponse>(jwtUtil.doGenerateToken(user))
+          .contentType(MediaType.APPLICATION_JSON)
+          .body(BodyInserters.fromValue(AuthResponse(jwtUtil.doGenerateToken(user))))
+//          .body(Mono.just(jwtUtil.doGenerateToken(user)))
           .switchIfEmpty(ServerResponse.status(HttpStatus.UNAUTHORIZED).build())
       }
-  }
+    }
   
-  fun getAllUsers(): Mono<ServerResponse> {
+  fun getAllUsers(req:ServerRequest): Mono<ServerResponse> {
     return ServerResponse.ok()
       .contentType(MediaType.APPLICATION_JSON)
-      .body<Memo>(userRepository.findAll())
+      .body(Mono.just(userRepository.findAll()))
   }
   
   fun getUser(req: ServerRequest): Mono<ServerResponse> {

@@ -17,26 +17,6 @@ import reactor.core.publisher.Mono
 @EnableWebFluxSecurity
 class SecurityConfig {
   
-//  @Bean
-//  SecurityWebFilterChain springWebFilterChain(ServerHttpSecurity http) {
-//    String[] patterns = new String[] {"/auth/**"};
-//    return http.cors().disable()
-//      .exceptionHandling()
-//      .authenticationEntryPoint((swe, e) -> Mono.fromRunnable(() -> {
-//      swe.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
-//    })).accessDeniedHandler((swe, e) -> Mono.fromRunnable(() -> {
-//      swe.getResponse().setStatusCode(HttpStatus.FORBIDDEN);
-//    })).and()
-//    .csrf().disable()
-//      .authenticationManager(authenticationManager)
-//      .securityContextRepository(securityContextRepository)
-//      .authorizeExchange()
-//      .pathMatchers(patterns).permitAll()
-//      .pathMatchers(HttpMethod.OPTIONS).permitAll()
-//      .anyExchange().authenticated()
-//      .and()
-//      .build();
-//  }
   @Bean
 fun springWebFilterChain(http: ServerHttpSecurity): SecurityWebFilterChain {
   return http.authorizeExchange()

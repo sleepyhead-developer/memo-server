@@ -2,13 +2,9 @@ package com.sleepyhead.memo.config
 
 import com.sleepyhead.memo.handler.MemoHandler
 import com.sleepyhead.memo.handler.UserHandler
-import org.springdoc.core.fn.builders.apiresponse.Builder.responseBuilder
-import org.springdoc.core.fn.builders.parameter.Builder.parameterBuilder
-import org.springdoc.webflux.core.fn.SpringdocRouteBuilder.route
 import org.springframework.context.annotation.Bean
 import org.springframework.stereotype.Component
-import org.springframework.web.reactive.function.server.RequestPredicates.*
-import org.springframework.web.reactive.function.server.RouterFunction
+import org.springframework.web.reactive.function.server.RequestPredicates.path
 import org.springframework.web.reactive.function.server.RouterFunctions.nest
 import org.springframework.web.reactive.function.server.router
 
@@ -35,6 +31,7 @@ class RouterConfig(private val memoHandler: MemoHandler, private val userHandler
     router {
       listOf(
         GET("/{uid}", userHandler::getUser),
+        GET(userHandler::getAllUsers), // for admin in future
         POST("/login", userHandler::login)
       )
     }

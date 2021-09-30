@@ -19,10 +19,7 @@ class JWTUtil (
   val secret: String,
 
   @Value("\${com.sleepyhead.jjwt.expiration}")
-  val expirationTime: String,
-  
-  @Value("\${com.sleepyhead.name}")
-  val name:String
+  val expirationTime: String
 ) {
   
   private var key: Key ?= null

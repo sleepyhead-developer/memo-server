@@ -19,7 +19,7 @@ class Memo (
   @Column(name = "id")
   val id: Int? = null,
 
-  @Column(name = "user_id")
+  @Column(name = "user_uid")
   val userId: Int,
   
   @Column(name = "title")
