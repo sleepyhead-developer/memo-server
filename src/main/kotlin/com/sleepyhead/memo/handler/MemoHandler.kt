@@ -71,9 +71,8 @@ class MemoHandler {
   }
   
   
-//  fun getTest(req: ServerRequest): Mono<ServerResponse> = ServerResponse.ok()
-//    .body<String>(Mono.just("pong"))
-//    .switchIfEmpty(ServerResponse.notFound().build())
-
+  fun getTest(req: ServerRequest): Mono<ServerResponse> = ServerResponse.ok()
+    .body<String>(Mono.just("pong"))
+    .switchIfEmpty(ServerResponse.notFound().build())
   
 }
