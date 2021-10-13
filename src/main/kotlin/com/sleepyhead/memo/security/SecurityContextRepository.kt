@@ -1,6 +1,7 @@
 package com.sleepyhead.memo.security
 
 import lombok.AllArgsConstructor
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpHeaders
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication
@@ -13,9 +14,12 @@ import reactor.core.publisher.Mono
 
 @AllArgsConstructor
 @Component
-class SecurityContextRepository : ServerSecurityContextRepository {
+class SecurityContextRepository(
+  @Autowired
+  private val jwtUtil: JWTUtil
+) : ServerSecurityContextRepository {
   
-  lateinit var authenticationManager: AuthenticationManager
+  private val authenticationManager = AuthenticationManager(jwtUtil)
   
   override fun save(exchange: ServerWebExchange?, context: SecurityContext?): Mono<Void> {
     throw UnsupportedOperationException("Not supported yet.")

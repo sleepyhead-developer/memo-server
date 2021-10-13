@@ -1,7 +1,6 @@
 package com.sleepyhead.memo.handler
 
 import com.sleepyhead.memo.model.Memo
-import com.sleepyhead.memo.model.User
 import com.sleepyhead.memo.repository.MemoRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.MediaType
@@ -10,8 +9,6 @@ import org.springframework.web.reactive.function.server.ServerRequest
 import org.springframework.web.reactive.function.server.ServerResponse
 import org.springframework.web.reactive.function.server.body
 import reactor.core.publisher.Mono
-import reactor.kotlin.core.publisher.toMono
-import java.util.function.Function
 
 @Component
 class MemoHandler {
