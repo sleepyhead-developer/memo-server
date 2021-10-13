@@ -1,13 +1,12 @@
 package com.sleepyhead.memo.security
 
-import com.sleepyhead.memo.model.User
+import com.sleepyhead.memo.model.Account
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.security.Keys
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
-import org.springframework.context.annotation.PropertySource
 import org.springframework.stereotype.Component
+import org.springframework.transaction.annotation.Transactional
 import java.security.Key
 import java.util.*
 
@@ -16,10 +15,10 @@ import java.util.*
 class JWTUtil (
   
   @Value("\${com.sleepyhead.jjwt.secret}")
-  val secret: String,
+  private val secret: String,
 
   @Value("\${com.sleepyhead.jjwt.expiration}")
-  val expirationTime: String
+  private val expirationTime: String
 ) {
   
   private var key: Key ?= null
@@ -39,6 +38,10 @@ class JWTUtil (
 //    return getAllClaimsFromToken(token).subject
 //  }
   
+  fun getUidFromToken(token: String): String {
+    return getAllClaimsFromToken(token).subject
+  }
+  
   fun getUserEmailFromToken(token: String): String {
     return getAllClaimsFromToken(token).subject
   }
@@ -52,19 +55,20 @@ class JWTUtil (
     return expiration.before(Date())
   }
   
-//  fun generateToken(user: User): String {
-//    val claims: MutableMap<String, Any> = HashMap()
-//    claims["role"] = user.getRoles()
-//    return doGenerateToken(claims, user.name);
-//  }
+  @Transactional
+  fun generateToken(account: Account): String {
+    val claims: MutableMap<String, Any> = HashMap()
+    claims["role"] = account.role
+    return doGenerateToken(claims, account.email);
+  }
   
-  fun doGenerateToken(user: User): String {
-    val expirationTimeLong: Long = expirationTime!!.toLong()
+  fun doGenerateToken(claims: MutableMap<String, Any>, email: String): String {
+    val expirationTimeLong: Long = expirationTime.toLong()
     val createdDate = Date()
     val expirationDate = Date(createdDate.time + (expirationTimeLong.times(1000)))
     return Jwts.builder()
-      .claim("uid", user.uid)
-      .setSubject(user.email)
+      .setClaims(claims)
+      .setSubject(email)
       .setIssuedAt(createdDate)
       .setExpiration(expirationDate)
       .signWith(key)

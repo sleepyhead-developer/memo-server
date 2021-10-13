@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-class Message {
-  private val content: String? = null
+class Message (
+  var content: String
+ ){
+ 
 }

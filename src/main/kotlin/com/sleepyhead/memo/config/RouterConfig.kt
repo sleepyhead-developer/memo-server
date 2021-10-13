@@ -1,16 +1,20 @@
 package com.sleepyhead.memo.config
 
 import com.sleepyhead.memo.handler.MemoHandler
-import com.sleepyhead.memo.handler.UserHandler
+import com.sleepyhead.memo.handler.AccountHandler
 import org.springframework.context.annotation.Bean
+import org.springframework.http.MediaType
 import org.springframework.stereotype.Component
-import org.springframework.web.reactive.function.server.RequestPredicates.path
+import org.springframework.web.reactive.function.server.RequestPredicates.*
+import org.springframework.web.reactive.function.server.RouterFunction
+import org.springframework.web.reactive.function.server.RouterFunctions
 import org.springframework.web.reactive.function.server.RouterFunctions.nest
+import org.springframework.web.reactive.function.server.ServerResponse
 import org.springframework.web.reactive.function.server.router
 
 
 @Component
-class RouterConfig(private val memoHandler: MemoHandler, private val userHandler: UserHandler) {
+class RouterConfig(private val memoHandler: MemoHandler, private val accountHandler: AccountHandler) {
   
   @Bean
   fun routerFunction() = nest(path("/memo"),
@@ -25,22 +29,24 @@ class RouterConfig(private val memoHandler: MemoHandler, private val userHandler
     }
   )
   
-  
+
   @Bean
-  fun userRouter() = nest(path("/user"),
+  fun accountRouter() = nest(path("/user"),
     router {
       listOf(
-        GET("/{uid}", userHandler::getUser),
-        GET(userHandler::getAllUsers), // for admin in future
-        POST("/login", userHandler::login)
+//        GET("/{uid}", userHandler::getUser),
+//        GET(userHandler::getAllUsers), // for admin in future
+        GET("/resource/admin", accountHandler::admin),
+        GET("/resource/user", accountHandler::user)
+//        POST("/googleLogin", userHandler::googleLogin)
       )
     }
   )
-//  @Bean
-//  fun memoAppRoutes(userHandler: UserHandler) : RouterFunction<ServerResponse>{
-//    return RouterFunctions
-//      .route(GET("/user/{uid}").and(accept(MediaType.APPLICATION_JSON)), userHandler::getUser)
-//      .andRoute(GET("/user/{uid}").and(accept(MediaType.APPLICATION_JSON)), userHandler::getUser)
-//  }
+  
+  @Bean
+  fun memoAppRoutes(accountHandler: AccountHandler) : RouterFunction<ServerResponse> {
+    return RouterFunctions
+      .route(POST("login").and(accept(MediaType.APPLICATION_JSON)), accountHandler::login)
+  }
 
 }

@@ -3,27 +3,23 @@ package com.sleepyhead.memo.security
 import lombok.AllArgsConstructor
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Bean
+import org.springframework.http.HttpMethod
 import org.springframework.http.HttpStatus
-import org.springframework.security.access.AccessDeniedException
-import org.springframework.security.config.annotation.method.configuration.EnableReactiveMethodSecurity
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity
 import org.springframework.security.config.web.server.ServerHttpSecurity
-import org.springframework.security.core.AuthenticationException
 import org.springframework.security.web.server.SecurityWebFilterChain
-import org.springframework.web.server.ServerWebExchange
 import reactor.core.publisher.Mono
 
 @AllArgsConstructor
 @EnableWebFluxSecurity
-@EnableReactiveMethodSecurity
-class WebSecurityConfig {
+class WebSecurityConfig (
   
   @Autowired
-  lateinit var authenticationManager: AuthenticationManager
+  private val authenticationManager: AuthenticationManager,
   
   @Autowired
-  lateinit var securityContextRepository: SecurityContextRepository
-  
+  private val securityContextRepository: SecurityContextRepository
+ ){
   @Bean
   fun securityWebFilterChain(http: ServerHttpSecurity): SecurityWebFilterChain {
     return http
@@ -42,7 +38,7 @@ class WebSecurityConfig {
       .securityContextRepository(securityContextRepository)
       
       .authorizeExchange()
-      
+      .pathMatchers(HttpMethod.OPTIONS).permitAll()
       .pathMatchers("/login").permitAll()
       .anyExchange().authenticated()
       .and()
