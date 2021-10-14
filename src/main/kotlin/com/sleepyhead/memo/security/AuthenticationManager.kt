@@ -13,7 +13,7 @@ import reactor.core.publisher.Mono
 
 @Component
 @AllArgsConstructor
-class AuthenticationManager(
+class AuthenticationManager (
   @Autowired
   private val jwtUtil: JWTUtil
 ) : ReactiveAuthenticationManager {

@@ -37,8 +37,8 @@ class RouterConfig(private val memoHandler: MemoHandler, private val accountHand
 //        GET("/{uid}", userHandler::getUser),
 //        GET(userHandler::getAllUsers), // for admin in future
         GET("/resource/admin", accountHandler::admin),
-        GET("/resource/user", accountHandler::user)
-//        POST("/googleLogin", userHandler::googleLogin)
+        GET("/resource/user", accountHandler::user),
+//        POST("/google", accountHandler::googleLogin)
       )
     }
   )

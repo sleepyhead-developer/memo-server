@@ -1,5 +1,6 @@
 package com.sleepyhead.memo.security
 
+import com.sleepyhead.memo.config.FirebaseConfig
 import lombok.AllArgsConstructor
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpHeaders
@@ -21,6 +22,9 @@ class SecurityContextRepository(
   
   private val authenticationManager = AuthenticationManager(jwtUtil)
   
+  @Autowired
+  private var firebaseConfig: FirebaseConfig ?= null
+  
   override fun save(exchange: ServerWebExchange?, context: SecurityContext?): Mono<Void> {
     throw UnsupportedOperationException("Not supported yet.")
   }
@@ -31,7 +35,8 @@ class SecurityContextRepository(
       .flatMap<SecurityContext?> { authHeader ->
         val authToken: String = authHeader.substring(7)
         val auth: Authentication = UsernamePasswordAuthenticationToken(authToken, authToken)
-        authenticationManager.authenticate(auth).map(::SecurityContextImpl)
+//        authenticationManager.authenticate(auth).map(::SecurityContextImpl)
+        firebaseConfig!!.authenticate(auth).map(::SecurityContextImpl)
       }
   }
   

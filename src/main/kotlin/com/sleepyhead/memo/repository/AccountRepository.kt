@@ -6,4 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository
 
 interface AccountRepository : JpaRepository<Account, Long> {
   fun findByEmailOrEmailNull(email: String): Account?
+  fun findByUidOrUidNull(uid:String): Account?
 }
