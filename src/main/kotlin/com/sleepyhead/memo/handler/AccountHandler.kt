@@ -1,22 +1,25 @@
 package com.sleepyhead.memo.handler
 
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthException
 import com.sleepyhead.memo.dto.LoginDto
-import com.sleepyhead.memo.model.Message
+import com.sleepyhead.memo.model.Account
 import com.sleepyhead.memo.model.security.AuthRequest
 import com.sleepyhead.memo.model.security.AuthResponse
 import com.sleepyhead.memo.repository.AccountRepository
 import com.sleepyhead.memo.security.JWTUtil
 import com.sleepyhead.memo.security.PBKDF2Encoder
+import com.sleepyhead.memo.util.getAuthorizationToken
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
-import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.reactive.function.BodyInserters
 import org.springframework.web.reactive.function.server.ServerRequest
 import org.springframework.web.reactive.function.server.ServerResponse
 import org.springframework.web.reactive.function.server.ServerResponse.ok
-import org.springframework.web.reactive.function.server.body
+import org.springframework.web.server.ResponseStatusException
 import reactor.core.publisher.Mono
 
 @Component
@@ -60,19 +63,32 @@ class AccountHandler {
     )
   }
   
-  @PreAuthorize("hasRole('ROLE_ADMIN')")
-  fun admin(req: ServerRequest): Mono<ServerResponse> {
-    println("admiiin")
-    return ServerResponse.ok()
-      .body(Mono.just(Message("contents for admin")))
-      .switchIfEmpty(Mono.empty())
-  }
-
-  fun user(req: ServerRequest): Mono<ServerResponse> {
-    println("user!!!")
-    return ServerResponse.ok()
-      .body(Mono.just(Message("contents for user")))
-      .switchIfEmpty(Mono.empty())
+  fun firebaseAuthenticate(req: ServerRequest): Mono<ServerResponse> {
+    val token = getAuthorizationToken(req.headers().firstHeader("Authorization")!!)
+    val decodedToken = FirebaseAuth.getInstance().verifyIdToken(token)
+    
+    try {
+      val newAccount = Account(
+        name = decodedToken.name,
+        uid = decodedToken.uid,
+        email = decodedToken.email,
+        photoUrl = decodedToken.picture,
+        creationTime = 0L,
+        lastSignInTime = 0L,
+        pwd = ""
+      )
+      accountRepository.save(newAccount)
+      return ok().contentType(MediaType.APPLICATION_JSON)
+        .body(BodyInserters.fromValue(LoginDto("Success", "Created User")))
+    } catch (e: IllegalArgumentException) {
+      ServerResponse.status(500).contentType(MediaType.APPLICATION_JSON)
+        .body(BodyInserters.fromValue(LoginDto("Failed", "Invalid Token")))
+      throw ResponseStatusException(HttpStatus.UNAUTHORIZED)
+    } catch (e: FirebaseAuthException) {
+      ServerResponse.status(500).contentType(MediaType.APPLICATION_JSON)
+        .body(BodyInserters.fromValue(LoginDto("Failed", "Invalid Token")))
+      throw ResponseStatusException(HttpStatus.UNAUTHORIZED)
+    }
   }
 }
 

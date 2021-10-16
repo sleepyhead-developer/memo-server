@@ -39,7 +39,7 @@ class WebSecurityConfig (
       
       .authorizeExchange()
       .pathMatchers(HttpMethod.OPTIONS).permitAll()
-      .pathMatchers("/login").permitAll()
+      .pathMatchers("/user/authenticate").permitAll()
       .anyExchange().authenticated()
       .and()
       .build()

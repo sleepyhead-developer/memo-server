@@ -35,10 +35,7 @@ class RouterConfig(private val memoHandler: MemoHandler, private val accountHand
     router {
       listOf(
 //        GET("/{uid}", userHandler::getUser),
-//        GET(userHandler::getAllUsers), // for admin in future
-        GET("/resource/admin", accountHandler::admin),
-        GET("/resource/user", accountHandler::user),
-//        POST("/google", accountHandler::googleLogin)
+        POST("/authenticate", accountHandler::firebaseAuthenticate),
       )
     }
   )
@@ -46,7 +43,7 @@ class RouterConfig(private val memoHandler: MemoHandler, private val accountHand
   @Bean
   fun memoAppRoutes(accountHandler: AccountHandler) : RouterFunction<ServerResponse> {
     return RouterFunctions
-      .route(POST("login").and(accept(MediaType.APPLICATION_JSON)), accountHandler::login)
+      .route(POST("/login").and(accept(MediaType.APPLICATION_JSON)), accountHandler::login)
   }
 
 }
