@@ -34,14 +34,6 @@ class JWTUtil (
     return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).body
   }
   
-//  fun getUsernameFromToken(token: String): String {
-//    return getAllClaimsFromToken(token).subject
-//  }
-  
-  fun getUidFromToken(token: String): String {
-    return getAllClaimsFromToken(token).subject
-  }
-  
   fun getUserEmailFromToken(token: String): String {
     return getAllClaimsFromToken(token).subject
   }

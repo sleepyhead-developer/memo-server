@@ -33,7 +33,7 @@ class AccountService {
     )
   
     val role = Role(
-      name = "ROLE_USER",
+      name = "user",
       id = 0L,
       account = ac
       )

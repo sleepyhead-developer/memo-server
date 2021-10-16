@@ -11,27 +11,18 @@ import javax.persistence.*
 @AllArgsConstructor
 @Getter
 @Setter
-@Table(name = "memo")
 class Memo (
   
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "id")
   val id: Int? = null,
-
-  @Column(name = "user_uid")
-  val userId: Int,
   
-  @Column(name = "title")
+  val accountId: Int,
+  
   var title: String,
   
-  @Column(name = "contents")
   var contents: String,
   
-  @Column(name = "creation_time")
   var creationTime: Long
   
  )
-{
-
-}
